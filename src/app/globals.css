@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Custom Properties ──────────────────────── */
+:root {
+  --gold:         #5E9B8A;
+  --gold-light:   #7BBDB0;
+  --gold-faint:   rgba(94, 155, 138, 0.14);
+  --gold-line:    rgba(94, 155, 138, 0.35);
+  --gold-glow:    rgba(94, 155, 138, 0.28);
+
+  --bg:           #F9FAFB;
+  --bg-2:         #FFFFFF;
+  --bg-sheet:     #FFFFFF;
+  --bg-group:     #F2F2F7;
+  --bg-input:     #F2F2F7;
+  --bg-btn:       #FFFFFF;
+  --tab-bg:       rgba(249, 250, 251, 0.88);
+  --nav-bg:       rgba(249, 250, 251, 0.75);
+
+  --txt-1:        #111111;
+  --txt-2:        #6B7280;
+  --txt-3:        #9CA3AF;
+
+  --sep:          rgba(0, 0, 0, 0.07);
+  --sh-sm:        0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --sh-md:        0 4px 16px rgba(0,0,0,0.07), 0 2px 6px rgba(0,0,0,0.04);
+  --sh-lg:        0 16px 48px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.05);
+
+  --font:         'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono:         'Geist Mono', 'SF Mono', monospace;
+}
+
+[data-dark="true"] {
+  --bg:           #0B0B0C;
+  --bg-2:         #141415;
+  --bg-sheet:     #1C1C1E;
+  --bg-group:     #1C1C1E;
+  --bg-input:     #2C2C2E;
+  --bg-btn:       #2C2C2E;
+  --tab-bg:       rgba(11, 11, 12, 0.88);
+  --nav-bg:       rgba(11, 11, 12, 0.75);
+
+  --txt-1:        #F5F5F7;
+  --txt-2:        #8E8E93;
+  --txt-3:        #48484A;
+
+  --sep:          rgba(255, 255, 255, 0.07);
+  --sh-sm:        0 1px 4px rgba(0,0,0,0.30);
+  --sh-md:        0 4px 16px rgba(0,0,0,0.40);
+  --sh-lg:        0 16px 48px rgba(0,0,0,0.55);
+}
+
+/* ── Reset ──────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--bg); }
+body {
+  font-family: var(--font);
+  color: var(--txt-1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+}
+::-webkit-scrollbar { width: 0; height: 0; }
+
+/* ── Keyframes ──────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slideUp {
+  from { transform: translateY(110%); }
+  to   { transform: translateY(0); }
+}
+@keyframes numUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes loadBar {
+  0%   { transform: translateX(-100%); }
+  50%  { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}
+@keyframes bannerIn {
+  from { opacity: 0; transform: translateY(-100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Utility classes ────────────────────────────── */
+.btn-primary {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #5E9B8A 0%, #4a8a79 100%);
+  border: none;
+  border-radius: 16px;
+  color: #fff;
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(94, 155, 138, 0.40), 0 1px 4px rgba(94, 155, 138, 0.25);
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-primary:active { transform: scale(0.98); filter: brightness(0.93); }
+.btn-primary:hover { box-shadow: 0 6px 28px rgba(94, 155, 138, 0.55), 0 1px 4px rgba(94, 155, 138, 0.30); }
+
+.btn-ghost {
+  width: 100%;
+  padding: 15px;
+  background: var(--bg-input);
+  border: none;
+  border-radius: 16px;
+  color: var(--txt-1);
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-ghost:active { transform: scale(0.98); }
+
+.k-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 15px;
+  font-family: var(--font);
+  color: var(--txt-1);
+  outline: none;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  -webkit-appearance: none;
+}
+.k-input:focus { box-shadow: 0 0 0 3px rgba(94, 155, 138, 0.22); border-color: rgba(94, 155, 138, 0.50); }
+.k-input::placeholder { color: var(--txt-3); }

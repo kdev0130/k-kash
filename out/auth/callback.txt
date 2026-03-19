@@ -1,0 +1,36 @@
+2:I[9107,[],"ClientPageRoot"]
+3:I[9838,["783","static/chunks/7e4c7320-6d3b9a1a367200f1.js","447","static/chunks/59a99548-866d1f39fa9782b0.js","258","static/chunks/258-8ad49016f681818b.js","453","static/chunks/app/auth/callback/page-c647fd111c482b7c.js"],"default",1]
+4:I[4707,[],""]
+5:I[6423,[],""]
+6:T436,
+              (function () {
+                try {
+                  if ("serviceWorker" in navigator) {
+                    navigator.serviceWorker
+                      .getRegistrations()
+                      .then(function (registrations) {
+                        return Promise.all(
+                          registrations.map(function (registration) {
+                            return registration.unregister();
+                          })
+                        );
+                      })
+                      .catch(function () {});
+                  }
+                  if ("caches" in window) {
+                    caches
+                      .keys()
+                      .then(function (keys) {
+                        return Promise.all(
+                          keys.map(function (key) {
+                            return caches.delete(key);
+                          })
+                        );
+                      })
+                      .catch(function () {});
+                  }
+                } catch (e) {}
+              })();
+            0:["F0yEXoUzLTcXyQWvv_e3N",[[["",{"children":["auth",{"children":["callback",{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],["",{"children":["auth",{"children":["callback",{"children":["__PAGE__",{},[["$L1",["$","$L2",null,{"props":{"params":{},"searchParams":{}},"Component":"$3"}],null],null],null]},[null,["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children","auth","children","callback","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined"}]],null]},[null,["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children","auth","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined"}]],null]},[[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/c97fdf3c23aae0e0.css","precedence":"next","crossOrigin":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"suppressHydrationWarning":true,"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"$6"}}],["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":"404"}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],"notFoundStyles":[]}]]}]}]],null],null],["$L7",null]]]]
+7:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no"}],["$","meta","1",{"name":"theme-color","content":"#5E9B8A"}],["$","meta","2",{"charSet":"utf-8"}],["$","title","3",{"children":"K-Kash"}],["$","meta","4",{"name":"description","content":"The official K-Kash wallet"}],["$","link","5",{"rel":"manifest","href":"/manifest.json","crossOrigin":"use-credentials"}],["$","meta","6",{"name":"format-detection","content":"telephone=no"}],["$","meta","7",{"name":"apple-mobile-web-app-capable","content":"yes"}],["$","meta","8",{"name":"apple-mobile-web-app-title","content":"K-Kash"}],["$","meta","9",{"name":"apple-mobile-web-app-status-bar-style","content":"default"}],["$","link","10",{"rel":"shortcut icon","href":"/icons/koli-logo.png"}],["$","link","11",{"rel":"icon","href":"/icons/koli-logo.png"}],["$","link","12",{"rel":"apple-touch-icon","href":"/icons/koli-logo.png"}]]
+1:null
