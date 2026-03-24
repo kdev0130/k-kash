@@ -22,6 +22,7 @@ const ROW1: ActionDef[] = [
 const ROW2: ActionDef[] = [
   { label: "Kash Out", icon: "kash_out", sheet: "kash_out", accent: "var(--gold)" },
   { label: "Kash In",  icon: "kash_in",  sheet: "kash_in",  accent: "var(--gold)" },
+  { label: "Withdraw", icon: "down", sheet: "withdraw", accent: "var(--gold)" },
 ];
 
 function ActionBtn({ label, icon, sheet, accent, onAction }: ActionDef & { onAction: ActionButtonsProps["onAction"] }) {
@@ -95,7 +96,7 @@ export function ActionButtons({ onAction }: ActionButtonsProps) {
       </div>
 
       {/* Row 2: Kash Out / Kash In */}
-      <div style={{ display: "flex", gap: 36 }}>
+      <div style={{ display: "flex", gap: 28 }}>
         {ROW2.map((a) => (
           <ActionBtn key={a.label} {...a} onAction={onAction} />
         ))}

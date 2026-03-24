@@ -1,4 +1,4 @@
-export type SheetType = "send" | "receive" | "kash_out" | "kash_in" | null;
+export type SheetType = "send" | "receive" | "kash_out" | "kash_in" | "withdraw" | null;
 export type TabId = "home" | "activity" | "kash" | "settings" | "profile";
 export type ToastType = "info" | "success" | "warn" | "error";
 

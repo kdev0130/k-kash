@@ -11,6 +11,7 @@ import { SendSheet } from "@/components/sheets/SendSheet";
 import { ReceiveSheet } from "@/components/sheets/ReceiveSheet";
 import { KashOutSheet } from "@/components/sheets/KashOutSheet";
 import { KashInSheet } from "@/components/sheets/KashInSheet";
+import { WithdrawSheet } from "@/components/sheets/WithdrawSheet";
 import { HomeScreen } from "@/components/screens/HomeScreen";
 import { ActivityScreen } from "@/components/screens/ActivityScreen";
 import { KashScreen } from "@/components/screens/KashScreen";
@@ -77,6 +78,7 @@ function AppShell({ children }: { children: ReactNode }) {
       {sheet === "receive" && <ReceiveSheet onClose={close} />}
       {sheet === "kash_out" && <KashOutSheet onClose={close} />}
       {sheet === "kash_in" && <KashInSheet onClose={close} />}
+      {sheet === "withdraw" && <WithdrawSheet onClose={close} />}
 
       {/* Bottom tab bar */}
       <TabBar tab={tab} setTab={setTab} openSheet={open} />

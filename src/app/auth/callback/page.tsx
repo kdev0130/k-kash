@@ -2,8 +2,9 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { signInWithCustomToken } from "firebase/auth";
+import { auth, db } from "@/lib/firebase";
 
 function AuthCallbackContent() {
   const router = useRouter();
@@ -11,9 +12,83 @@ function AuthCallbackContent() {
   const [status, setStatus] = useState<"processing" | "success" | "error">("processing");
   const [message, setMessage] = useState("Processing authorization...");
 
+  const tokenServiceUrl =
+    process.env.NEXT_PUBLIC_TOKEN_SERVICE_URL ?? "http://localhost:4000";
+
   useEffect(() => {
     handleCallback();
   }, []);
+
+  const getIdToken = async () => {
+    const token = await auth.currentUser?.getIdToken(true);
+    if (!token) throw new Error("Unable to obtain auth token");
+    return token;
+  };
+
+  const ensureKashAccount = async (authData: any) => {
+    // Ensure auth before any protected reads/writes
+    await getIdToken();
+    const memberRef = doc(db, "members", authData.userId);
+    const kashRef = doc(db, "kashAccounts", authData.userId);
+
+    const [memberSnap, kashSnap] = await Promise.all([
+      getDoc(memberRef),
+      getDoc(kashRef),
+    ]);
+
+    const member = memberSnap.exists() ? memberSnap.data() : {};
+    let walletPublicKey = kashSnap.exists()
+      ? (kashSnap.data().walletPublicKey as string | undefined)
+      : undefined;
+    let walletId = kashSnap.exists()
+      ? (kashSnap.data().walletId as string | undefined)
+      : undefined;
+
+    if (!walletPublicKey) {
+      const token = await getIdToken();
+      const res = await fetch(`${tokenServiceUrl}/create-wallet`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userID: authData.userId }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to create wallet");
+      }
+
+      const payload = await res.json();
+      walletPublicKey = payload.publicKey;
+      walletId = payload.walletId;
+    }
+
+    const displayName =
+      member.displayName || authData.displayName || authData.email?.split("@")[0];
+    const email = member.email || authData.email;
+
+    const accountPayload: Record<string, unknown> = {
+      uid: authData.userId,
+      email,
+      displayName,
+      firstName: member.firstName || null,
+      lastName: member.lastName || null,
+      walletPublicKey,
+      walletId: walletId ?? null,
+      lastLoginAt: serverTimestamp(),
+      memberUid: authData.userId,
+    };
+
+    if (!kashSnap.exists()) {
+      accountPayload.createdAt = serverTimestamp();
+    }
+
+    await setDoc(kashRef, accountPayload, { merge: true });
+
+    return { displayName, email, walletPublicKey };
+  };
 
   const handleCallback = async () => {
     const code = searchParams?.get("code");
@@ -44,37 +119,40 @@ function AuthCallbackContent() {
     }
 
     try {
-      // Fetch authorization from Firestore
-      const authDoc = await getDoc(doc(db, "walletAuthorizations", code));
-
-      if (!authDoc.exists()) {
-        throw new Error("Invalid authorization code");
-      }
-
-      const authData = authDoc.data();
-
-      // Check if already used
-      if (authData.used) {
-        throw new Error("Authorization code already used");
-      }
-
-      // Check if expired
-      const expiresAt = new Date(authData.expiresAt);
-      if (expiresAt < new Date()) {
-        throw new Error("Authorization code expired");
-      }
-
-      // Mark as used
-      await updateDoc(doc(db, "walletAuthorizations", code), {
-        used: true,
-        usedAt: new Date().toISOString(),
+      const tokenRes = await fetch(`${tokenServiceUrl}/auth/kash-token`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ code }),
       });
+
+      if (!tokenRes.ok) {
+        const err = await tokenRes.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to authorize");
+      }
+
+      const tokenPayload = await tokenRes.json();
+      const authData = {
+        userId: tokenPayload.user?.id,
+        email: tokenPayload.user?.email,
+        displayName: tokenPayload.user?.displayName,
+        avatarInitial: tokenPayload.user?.avatarInitial,
+      };
+
+      if (!authData.userId) {
+        throw new Error("Authorization payload missing user id");
+      }
+
+      await signInWithCustomToken(auth, tokenPayload.customToken);
+
+      const accountInfo = await ensureKashAccount(authData);
 
       // Build session from embedded auth data (no members read needed)
       const authUser = {
         id: authData.userId,
-        name: authData.displayName || authData.email.split("@")[0],
-        email: authData.email,
+        name: accountInfo.displayName || authData.email.split("@")[0],
+        email: accountInfo.email || authData.email,
         avatarInitial: authData.avatarInitial || authData.email[0].toUpperCase(),
         joinedAt: new Date().toISOString(),
       };

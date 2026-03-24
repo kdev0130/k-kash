@@ -16,7 +16,7 @@ interface ProfileScreenProps {
 export function ProfileScreen({ onBack }: ProfileScreenProps) {
   const { user, updateProfile, logout } = useAuth();
   const { addToast } = useToast();
-  const { address } = useWallet();
+  const { address, walletId } = useWallet();
 
   const [editing, setEditing]         = useState(false);
   const [name, setName]               = useState(user?.name ?? "");
@@ -136,7 +136,7 @@ export function ProfileScreen({ onBack }: ProfileScreenProps) {
           <div style={{ fontSize: 11, fontWeight: 600, color: "var(--txt-3)", letterSpacing: "0.05em", textTransform: "uppercase", padding: "14px 16px 6px" }}>
             Wallet
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px 14px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px" }}>
             <div
               style={{
                 width: 30, height: 30, borderRadius: 9,
@@ -157,6 +157,34 @@ export function ProfileScreen({ onBack }: ProfileScreenProps) {
                 if (address) {
                   navigator.clipboard.writeText(address);
                   addToast("Address copied", "info");
+                }
+              }}
+              style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", display: "flex" }}
+            >
+              <Icon name="copy" size={15} color="var(--txt-3)" strokeWidth={1.8} />
+            </button>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "0 16px 14px" }}>
+            <div
+              style={{
+                width: 30, height: 30, borderRadius: 9,
+                background: "var(--gold-faint)",
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+              }}
+            >
+              <Icon name="info" size={15} color="var(--gold)" strokeWidth={1.8} />
+            </div>
+            <div>
+              <div style={{ fontSize: 12, color: "var(--txt-3)", marginBottom: 2 }}>Wallet ID</div>
+              <div style={{ fontSize: 13, fontFamily: "var(--mono)", color: "var(--txt-1)", letterSpacing: "0.03em" }}>
+                {walletId ?? "—"}
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                if (walletId) {
+                  navigator.clipboard.writeText(walletId);
+                  addToast("Wallet ID copied", "info");
                 }
               }}
               style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", display: "flex" }}
